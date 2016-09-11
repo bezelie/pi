@@ -7,8 +7,8 @@ pwm = PWM(0x40)
 
 # Constants
 center = 310
-pitMin = center - 40 # Upward
-pitMax = center + 40 # Downward
+pitMin = center - 30 # Upward
+pitMax = center + 30 # Downward
 rotMin = center - 50 # Clockwise
 rotMax = center + 50 # AntiClockwise
 yawMin = center -100 # Clocwise
@@ -78,7 +78,6 @@ try:
     yawDest = center
     servo ()
     sleep (0.5)
-
 except KeyboardInterrupt:
   print " Interrupted by Keyboard"
 
