@@ -1,83 +1,40 @@
 # Bezelie Sample Code for Raspberry Pi : Servo Movement Test
 
-from Adafruit_PWM_Servo_Driver import PWM
 from  time import sleep
+import bezelie
 
-pwm = PWM(0x40)
-
-# Constants
-center = 310
-pitMin = center - 30 # Upward
-pitMax = center + 30 # Downward
-rotMin = center - 50 # Clockwise
-rotMax = center + 50 # AntiClockwise
-yawMin = center -100 # Clocwise
-yawMax = center +100 # AntiClockWise
-pwm.setPWMFreq(47)   # Set frequency to 50 Hz
-
-# Initialization
-pit = pitDest = rot = rotDest = yaw = yawDest = center
-
-# Functions
-def servo (speed=0.001):
-  global pit, rot, yaw
-  while (True):
-    if pit < pitDest:
-      pit += 1
-    if pit > pitDest:
-      pit -= 1
-    pwm.setPWM(2, 0, pit)
-    if rot < rotDest:
-      rot += 1
-    if rot > rotDest:
-      rot -= 1
-    pwm.setPWM(1, 0, rot)
-    if yaw < yawDest:
-      yaw += 1
-    if yaw > yawDest:
-      yaw -= 1
-    pwm.setPWM(0, 0, yaw)
-#    sleep (speed)
-    if pit == pitDest and rot == rotDest and yaw == yawDest:
-      break
-
-# Centering All Servos
-c = 0
-while c < 16:
-    pwm.setPWM(c, 0, center)
-    c += 1
-    sleep(0.1)
+# Set Up
+bezelie.centering()
 
 # Main Loop
 try:
   while (True):
-    pitDest = pitMax
-    servo ()
+    bezelie.movePit (30, 2)
     sleep (0.2)
-    pitDest = pitMin
-    servo ()
+
+    bezelie.movePit (-30, 1)
     sleep (0.2)
-    pitDest = center
-    servo ()
+
+    bezelie.movePit (0)
     sleep (0.5)
-    rotDest = rotMax
-    servo ()
+
+    bezelie.moveRot (30, 1)
     sleep (0.2)
-    rotDest = rotMin
-    servo ()
+
+    bezelie.moveRot (-30, 1)
     sleep (0.2)
-    rotDest = center
-    servo ()
+
+    bezelie.moveRot (0)
     sleep (0.5)
-    yawDest = yawMax
-    servo ()
+
+    bezelie.moveYaw (40)
     sleep (0.2)
-    yawDest = yawMin
-    servo ()
+
+    bezelie.moveYaw (-40)
     sleep (0.2)
-    yawDest = center
-    servo ()
+
+    bezelie.moveYaw (0)
     sleep (0.5)
+
 except KeyboardInterrupt:
   print " Interrupted by Keyboard"
-
