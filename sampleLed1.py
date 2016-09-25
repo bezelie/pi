@@ -19,3 +19,5 @@ try:
     sleep(0.5)
 except KeyboardInterrupt:
   print " Interrupted by Keyboard"
+
+GPIO.cleanup()

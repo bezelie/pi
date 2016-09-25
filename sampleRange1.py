@@ -50,3 +50,4 @@ try:
 except KeyboardInterrupt:
   print " Interrupted by Keyboard"
 
+GPIO.cleanup()
