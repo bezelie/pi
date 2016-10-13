@@ -1,4 +1,4 @@
-# Bezelie Sample Code for Raspberry Pi : Camera Looking Around
+# Bezelie Sample Code for Raspberry Pi : Camera Moving Test
 
 from  time import sleep
 import picamera
@@ -29,3 +29,5 @@ try:
 
 except KeyboardInterrupt:
   print " Interrupted by Keyboard"
+
+GPIO.cleanup()
