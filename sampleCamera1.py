@@ -10,8 +10,8 @@ bezelie.centering()
 # Main Loop
 try:
   with picamera.PiCamera() as camera:
-    camera.resolution = (800, 480)   # Change this number for your display
-    camera.rotation = 180            # comment out if your screen upside down
+    camera.resolution = (800, 480)   # change this number depending on your display
+    camera.rotation = 180            # comment out if your screen is upside down
     camera.start_preview()
     sleep(0.2)
     pit = 0
