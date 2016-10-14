@@ -18,16 +18,15 @@ try:
     while (True):
       bezelie.moveRot (-20)
       bezelie.moveYaw (-40, 2)
-      sleep (0.1)
+      sleep (1)
       bezelie.moveRot (20)
       bezelie.moveYaw (40, 2)
-      sleep (0.1)
+      sleep (1)
       pit += 10
       if pit > 20:
-        pit = -30
+        pit = -20
       bezelie.movePit (pit)
+      sleep (1)
 
 except KeyboardInterrupt:
   print " Interrupted by Keyboard"
-
-GPIO.cleanup()

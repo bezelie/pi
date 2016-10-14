@@ -64,15 +64,16 @@ try:
       bezelie.moveRot (-15)
       bezelie.moveYaw (-40, 2)
       sensorCheck()
-      time.sleep (0.1)
+      time.sleep (1)
       bezelie.moveRot (15)
       bezelie.moveYaw (40, 2)
       sensorCheck()
-      time.sleep (0.1)
+      time.sleep (1)
       pit += 10
       if pit > 10:
-        pit = -30
+        pit = -20
       bezelie.movePit (pit)
+      time.sleep (1)
 
 except KeyboardInterrupt:
   print " Interrupted by Keyboard"
