@@ -50,7 +50,7 @@ def get_distance():
 def sensorCheck():
   if get_distance() < actionDistance:
     bezelie.centering()
-    subprocess.call('/home/pi/aquestalkpi/AquesTalkPi -s 120 "ろくおんかいし" | aplay -D plughw:1,0', shell=True)
+    subprocess.call('/home/pi/aquestalkpi/AquesTalkPi -s 120 "ろくおんかいし" | aplay', shell=True)
     camera.stop_preview()
 #   Recording
     print ("recording...")
@@ -73,7 +73,7 @@ def sensorCheck():
     waveFile.close()
 
 #   Play
-    subprocess.call('aplay -D plughw:1,0 test.wav', shell=True)
+    subprocess.call('aplay test.wav', shell=True)
 
     camera.start_preview()
 

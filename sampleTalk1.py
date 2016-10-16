@@ -12,7 +12,7 @@ bezelie.centering()
 try:
   while (True):
     bezelie.movePit (20, 1)
-    subprocess.call('/home/pi/aquestalkpi/AquesTalkPi -s 120 "こんにちわー" | aplay -Dhw:1,0', shell=True)
+    subprocess.call('/home/pi/aquestalkpi/AquesTalkPi -s 120 "こんにちわー" | aplay', shell=True)
     sleep(0.5)
     bezelie.movePit (0, 1)
     sleep(2)
