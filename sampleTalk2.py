@@ -38,10 +38,9 @@ def timeMessage(timeSlot):
 
   # AquesTalk
   print data[ansNum][2]
-  bezelie.movePit (20, 1)
-  sleep(2)
+  bezelie.movePit (-20, 1)
   subprocess.call('/home/pi/aquestalkpi/AquesTalkPi -s 120 "'+ data[ansNum][2] +'" | aplay', shell=True)
-  sleep(2)
+  sleep(0.5)
   bezelie.movePit (0, 1)
   sleep(2)
 
@@ -59,7 +58,7 @@ try:
     elif now.hour == awakingTime:
       print "It is an awaking time"
       timeMessage("awaking")
-      sleep(randint(60*10,60*20))
+#      sleep(randint(60*10,60*20))
     elif now.hour < 12:
       print "It is a morning"
       timeMessage("morning")
