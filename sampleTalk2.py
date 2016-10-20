@@ -58,7 +58,7 @@ try:
     elif now.hour == awakingTime:
       print "It is an awaking time"
       timeMessage("awaking")
-#      sleep(randint(60*10,60*20))
+      sleep(randint(60*10,60*20))
     elif now.hour < 12:
       print "It is a morning"
       timeMessage("morning")
