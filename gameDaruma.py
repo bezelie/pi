@@ -52,6 +52,7 @@ try:
   while mode == 0:
     print ("僕から１メートル離れてね")
     subprocess.call('/home/pi/aquestalkpi/AquesTalkPi -s 120 "僕から１メートル離れてね" | aplay', shell=True)
+    time.sleep(1)
     while True:
       dist = round(get_distance(),1)
       if dist > 80 and dist < 120:
