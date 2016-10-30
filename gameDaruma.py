@@ -67,7 +67,7 @@ try:
       if randint(0,1) == 0:
         subprocess.call('/home/pi/aquestalkpi/AquesTalkPi -s 120 "後ろ！" | aplay', shell=True)
       else:
-        subprocess.call('/home/pi/aquestalkpi/AquesTalkPi -s 120 "前の逆！" | aplay', shell=True)
+        subprocess.call('/home/pi/aquestalkpi/AquesTalkPi -s 120 "前の逆！！" | aplay', shell=True)
     else:
       bezelie.movePit (20)
       print ("前！")
@@ -79,7 +79,7 @@ try:
 
     while True:
       dist = round(get_distance(),1)
-      if dist > 10 and < 300:
+      if dist > 10 and dist < 300:
         break
 
     bezelie.movePit (0)
