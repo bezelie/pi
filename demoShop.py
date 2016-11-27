@@ -8,11 +8,12 @@ from time import sleep
 from random import randint
 import subprocess
 import picamera
+import RPi.GPIO as GPIO
 import bezelie
 
 csvFile = "bezeTalkShop.csv"
-openTime = 6
-closeTime = 23
+openTime = 0
+closeTime = 24
 
 # Definition
 def timeMessage(timeSlot):
@@ -48,8 +49,9 @@ try:
     if now.hour >= openTime and now.hour < closeTime: # Activate only in the business hour
       with picamera.PiCamera() as camera:
         camera.resolution = (800, 480)                # Display Resolution
-        camera.framerate = 30                         # Frame Rate Max = 30
+        camera.framerate = 30                         # Frame Rate Max = 30fps
         camera.rotation = 180                         # Up side Down
+        camera.led = False
         camera.start_preview()
         sleep (0.2)
       
@@ -58,26 +60,33 @@ try:
           bezelie.moveRot (-5)
           sleep (0.2)
           bezelie.moveYaw (-40, 2)
-          sleep (1)
+          sleep (0.5)
           bezelie.moveRot ( 5)
           sleep (0.2)
           bezelie.moveYaw ( 40, 2)
-          sleep (1.5)
+          sleep (1)
           bezelie.moveRot (-5)
           sleep (0.2)
           bezelie.moveYaw ( 0, 2)
-          sleep (1)
           bezelie.moveRot ( 0)
+          sleep (0.5)
+          bezelie.movePit (-15)
           sleep (0.2)
+          bezelie.moveRot ( 10)
+          sleep (0.2)
+          bezelie.moveRot (-10)
+          sleep (0.4)
+          bezelie.moveRot ( 0)
+          timeMessage("afternoon")
+          sleep (0.5)
           pit += 5
           if pit > 10:
             pit = -15
           bezelie.movePit (pit)
-          timeMessage("afternoon")
-          sleep (1)
+          sleep (0.2)
     else:
       print "営業時間外です"
-      sleep(60 )
+      sleep(60)
 
-except KeyboardInterrupt:
-  print " Interrupted by Keyboard"
+except:
+  pass
