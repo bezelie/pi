@@ -11,30 +11,30 @@ import picamera
 import bezelie
 
 csvFile = "bezeTalkShop.csv"
-openTime = 11
-closeTime = 20
+openTime = 6
+closeTime = 23
 
 # Definition
 def timeMessage(timeSlot):
   data = []
-  with open(csvFile, 'rb') as f:  # opening the file to read
+  with open(csvFile, 'rb') as f:  # opening the data file to read
     for i in csv.reader(f):       
-      data.append(i)              
+      data.append(i)              # raw data
 
   data1 = []
   for index,i in enumerate(data): # making candidate list
-    if i[1]==timeSlot:            
-      j = int(i[3])*randint(1,100) # Calucurate Probability
-      data1.append(i+[j]+[index])
+    if i[1]==timeSlot:            # Checking time
+      j = int(i[3])*randint(1,100)# Adding random to probability
+      data1.append(i+[j]+[index]) # Candidates data
 
   maxNum = 0
   for i in data1:                 # decision
-    if i[5] > maxNum:             # Whitch is the max.
-      maxNum = i[5]               # Probability
-      ansNum = i[6]               # index
+    if i[5] > maxNum:             # Whitch is the max probability.
+      maxNum = i[5]               # Max probability
+      ansNum = i[6]               # Index of answer
 
   # AquesTalk
-  print data[ansNum ][2]
+  print data[ansNum][2]
   subprocess.call('/home/pi/aquestalkpi/AquesTalkPi -s 120 "'+ data[ansNum ][2] +'" | aplay', shell=True)
 
 # Get Started
@@ -45,11 +45,11 @@ try:
   while (True):
     now = datetime.datetime.now()
     print now
-    if now.hour >= openTime and now.hour <= closeTime:
+    if now.hour >= openTime and now.hour < closeTime: # Activate only in the business hour
       with picamera.PiCamera() as camera:
-        camera.resolution = (800, 480)
-        camera.framerate = 30              # Max = 30
-        camera.rotation = 180
+        camera.resolution = (800, 480)                # Display Resolution
+        camera.framerate = 30                         # Frame Rate Max = 30
+        camera.rotation = 180                         # Up side Down
         camera.start_preview()
         sleep (0.2)
       
@@ -76,6 +76,7 @@ try:
           timeMessage("afternoon")
           sleep (1)
     else:
+      print "営業時間外です"
       sleep(60 )
 
 except KeyboardInterrupt:
