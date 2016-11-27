@@ -40,6 +40,7 @@ def timeMessage(timeSlot):
 
 # Get Started
 bezelie.centering()
+subprocess.call('ifconfig | grep inetアドレス.*ブロードキャスト', shell=True)
 
 # Main Loop
 try:
@@ -89,4 +90,4 @@ try:
       sleep(60)
 
 except:
-  pass
+  subprocess.call('ifconfig | grep inetアドレス.*ブロードキャスト', shell=True)
