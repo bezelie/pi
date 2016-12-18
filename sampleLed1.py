@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # Bezelie Sample Code for Raspberry Pi : LED test
 
 import RPi.GPIO as GPIO
