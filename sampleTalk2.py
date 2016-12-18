@@ -1,5 +1,6 @@
-# -*- coding: utf-8 -*- Bezelie Sample Code for Raspberry Pi selecting 
-# speaking messages referring to csv file
+# -*- coding: utf-8 -*-
+# Bezelie Sample Code for Raspberry Pi
+# speaking random messages referring to csv file
 
 import csv
 import datetime
@@ -11,9 +12,10 @@ import bezelie
 csvFile = "bezeTalk.csv"
 awakingTime = 7
 sleepingTime = 24
+interval = 0.1                    # seconds between the talks
 
-# Definition
-def timeMessage(timeSlot):
+# Functions
+def talkMessage(trigger):
   data = []
   with open(csvFile, 'rb') as f:  # opening the file to read
     for i in csv.reader(f):       
@@ -21,8 +23,8 @@ def timeMessage(timeSlot):
 
   data1 = []
   for index,i in enumerate(data): # making candidate list
-    if i[1]==timeSlot:            
-      j = int(i[3])*randint(9,11)
+    if i[1]==trigger:            
+      j = int(i[3])*randint(1,10)
       data1.append(i+[j]+[index])
 
   maxNum = 0
@@ -38,14 +40,14 @@ def timeMessage(timeSlot):
 
   # AquesTalk
   print data[ansNum][2]
-  bezelie.movePit (-20, 1)
+  bezelie.moveHead (20)
   subprocess.call('/home/pi/aquestalkpi/AquesTalkPi -s 120 "'+ data[ansNum][2] +'" | aplay', shell=True)
   sleep(0.5)
-  bezelie.movePit (0, 1)
-  sleep(2)
+  bezelie.moveHead (0, 2)
 
 # Get Started
-bezelie.centering()
+bezelie.initPCA9685()
+bezelie.moveCenter()
 
 # Main Loop
 try:
@@ -54,35 +56,35 @@ try:
     print now
     if now.hour < awakingTime:
       print "It is a midnight"
-      sleep(60)
+      sleep(interval)
     elif now.hour == awakingTime:
       print "It is an awaking time"
-      timeMessage("awaking")
-      sleep(randint(60*10,60*20))
+      talkMessage("awaking")
+      sleep(interval * randint(10,20))
     elif now.hour < 12:
       print "It is a morning"
-      timeMessage("morning")
-      sleep(randint(60*50,60*70))
+      talkMessage("morning")
+      sleep(interval * randint(50,70))
     elif now.hour == 12:
       print "It is about noon"
-      timeMessage("noon")
-      sleep(randint(60*20,60*40))
+      talkMessage("noon")
+      sleep(interval * randint(20,40))
     elif now.hour < 16:
       print "It is an afternoon"
-      timeMessage("afternoon")
-      sleep(randint(60*110,60*130))
+      talkMessage("afternoon")
+      sleep(interval * randint(110,130))
     elif now.hour < 19:
       print "It is an evening"
-      timeMessage("evening")
-      sleep(randint(60*50,60*70))
+      talkMessage("evening")
+      sleep(interval * randint(50,70))
     elif now.hour < sleepingTime-1:
       print "It is a night"
-      timeMessage("night")
-      sleep(randint(60*50,60*70))
+      talkMessage("night")
+      sleep(interval * randint(50,70))
     else:
       print "It is a time to go to the bed"
-      timeMessage("bedtime")
-      sleep(randint(60*20,60*40))
+      talkMessage("bedtime")
+      sleep(interval * randint(20,40))
 
 except KeyboardInterrupt:
   print " Interrupted by Keyboard"
