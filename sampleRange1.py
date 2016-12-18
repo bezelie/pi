@@ -10,7 +10,7 @@ echo_pin = 23       # GPIO 23
 actionDistance = 10 # centi mater
 
 # Set Up
-bezelie.centering()
+bezelie.moveCenter()
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(trigger_pin, GPIO.OUT)
 GPIO.setup(echo_pin, GPIO.IN)
@@ -36,14 +36,17 @@ def get_distance():
     distance  = pulse_len / 0.000058
     return (distance)    
 
+# Set Up
+bezelie.initPCA9685()
+bezelie.moveCenter()
+
 # Main Loop
 try:
   while True:
     print(round(get_distance(),1))
     if get_distance() < actionDistance:
-      bezelie.movePit (-30)
-      time.sleep(0.5)
-      bezelie.movePit (0, 4)
+      bezelie.moveHead (20)
+      bezelie.moveHead (0, 4)
       time.sleep(0.5)
     else:
       time.sleep(0.5)

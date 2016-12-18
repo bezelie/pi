@@ -48,3 +48,7 @@ timeSlot,noon,ハンバーグの匂いがするよ,100,0
 timeSlot,noon,ラーメンの匂いがするよ,100,0
 timeSlot,noon,お昼ごはん何がいいかなー,100,0
 timeSlot,noon,やったーもうお昼だよ,100,0
+distance,short,近いねー,100,0
+distance,short,近いよ,100,0
+distance,long,遠いねー,100,0
+distance,long,遠いよ,100,0
