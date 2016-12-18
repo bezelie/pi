@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*- 
 # Bezelie Sample Code for Raspberry Pi : Camera Moving Test
 
 from  time import sleep
@@ -5,8 +6,8 @@ import picamera
 import bezelie
 
 # Centering All Servos
-bezelie.centering()
-sleep (1)
+bezelie.initPCA9685()
+bezelie.moveCenter()
 
 # Main Loop
 try:
@@ -15,21 +16,18 @@ try:
     camera.rotation = 180            # comment out if your screen is upside down
     camera.start_preview()
     sleep(2)
-    pit = 0
+    head = 0
     while (True):
-      bezelie.moveRot (-10)
+      bezelie.moveBack (20)
+      bezelie.moveStage (40, 2)
       sleep (0.5)
-      bezelie.moveYaw (-40, 2)
-      sleep (1)
-      bezelie.moveRot ( 10)
+      bezelie.moveBack (-20)
+      bezelie.moveStage (-40, 2)
       sleep (0.5)
-      bezelie.moveYaw (40, 2)
-      sleep (1)
-      pit += 10
-      if pit > 20:
-        pit = -20
-      bezelie.movePit (pit)
-      sleep (0.5)
+      head += 10
+      if head > 20:
+        head = -20
+      bezelie.moveHead (head)
 
 except KeyboardInterrupt:
   print " Interrupted by Keyboard"

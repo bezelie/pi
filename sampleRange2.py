@@ -67,6 +67,7 @@ def talkMessage(trigger):
   subprocess.call('/home/pi/aquestalkpi/AquesTalkPi -s 120 "'+ data[ansNum ][2] +'" | aplay', shell=True)
 
 # Get Started
+bezelie.initPCA9685()
 bezelie.moveCenter()
 
 # Main Loop
