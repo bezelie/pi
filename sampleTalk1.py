@@ -6,15 +6,16 @@ import subprocess
 import bezelie
 
 # Get Started
-bezelie.centering()
+bezelie.initPCA9685()
+bezelie.moveCenter()
 
 # Main Loop
 try:
   while (True):
-    bezelie.movePit (20, 1)
+    bezelie.moveHead (20)
     subprocess.call('/home/pi/aquestalkpi/AquesTalkPi -s 120 "こんにちわー" | aplay', shell=True)
     sleep(0.5)
-    bezelie.movePit (0, 1)
+    bezelie.moveHead (0, 1)
     sleep(2)
 
 except KeyboardInterrupt:
