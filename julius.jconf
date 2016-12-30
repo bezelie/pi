@@ -1,18 +1,11 @@
--w julius.dic                               #単語辞書ファイル
--v /home/pi/dictation-kit-v4.4/model/lang_m/bccwj.60k.htkdic          #N-gram、または文法用の単語辞書ファイルを指定する
--h /home/pi/dictation-kit-v4.4/model/phone_m/jnas-tri-3k16-gid.binhmm #使用するHMM定義ファイル
--hlist /home/pi/dictation-kit-v4.4/model/phone_m/logicalTri           #HMMlistファイルを指定する
--lmp 8.0 -2.0
--lmp2 8.0 -2.0
--b 1500
--b2 100
--s 500
--m 10000
+-w julius.dic                                                         #単単語認識で用いる単語辞書を指定する
+-v /home/pi/dictation-kit-v4.4/model/lang_m/bccwj.60k.htkdic          #言語モデル、発音辞書
+-h /home/pi/dictation-kit-v4.4/model/phone_m/jnas-tri-3k16-gid.binhmm #GMM-HMM音響モデル
+-hlist /home/pi/dictation-kit-v4.4/model/phone_m/logicalTri           #Triphoneリスト
 -n 5                                      #n個の文仮説数が見つかるまで検索を行う
 -output 1                                 #見つかったN-best候補のうち、結果として出力する個数
--input mic                                #マイク使用
--zmeanframe
+-input mic                                #マイクからの直接入力
 -input oss                                #オープンサウンドシステム使用
 -rejectshort 600                          #検出された入力が閾値以下なら棄却
--charconv euc-jp utf8                     #入出力エンコード指定(内部euc-jp, 出力utf-8)
--lv 1000                                  #入力の振幅レベルの閾値(0~32767)
+-charconv euc-jp utf8                     #出力文字コードの変換(内部euc-jp, 出力utf-8)
+-lv 1000                                  #入力の振幅レベルのしきい値(0から32767の範囲。デフォルトは2000)
