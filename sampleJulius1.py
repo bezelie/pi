@@ -7,14 +7,15 @@ import subprocess
 import xml.etree.ElementTree as ET
 
 # Variables
+# 本来は発話中にJuliusを一時停止すべきですが、このプログラムでは簡易的にウェイトだけで処理しています。
 muteTime = 0.8     # 音声入力を無視する時間（の半分の秒数）
 bufferSize = 16384 # 受信するデータの最大バイト数。できるだけ小さな２の倍数が望ましい。
 
-# Juliusをモジュールモードで起動＝音声認識サーバーにする
+# Juliusをサーバモジュールモードで起動＝音声認識サーバーにする
 print "Pleas Wait For A While"  # サーバーが起動するまで時間がかかるので待つ
 p = subprocess.Popen(["sh julius.sh"], stdout=subprocess.PIPE, shell=True)
 pid = p.stdout.read()  # 終了時にJuliusのプロセスをkillするためプロセスIDをとっておく 
-print "Julius'S Process ID =" +pid
+print "Julius's Process ID =" +pid
 
 # Juliusサーバーにアクセスするため自分のIPアドレスを取得する 
 getIP = subprocess.Popen(["hostname -I | awk -F' ' '{print $1}'"], stdout=subprocess.PIPE, shell=True)
@@ -23,7 +24,7 @@ print "My IP is " +myIP
 
 # TCPクライアントを作成しJuliusサーバーに接続する
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # clientオブジェクト生成
-client.connect((myIP, 10500))  # Juliusサーバーに接続
+client.connect((myIP, 10500))  # Juliusサーバーに接続。portはデフォルトが10500。
 
 # 解説
 # Juliusから出力されるXML構造
