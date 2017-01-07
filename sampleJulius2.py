@@ -1,19 +1,20 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # Bezelie demo Code for Raspberry Pi : Simple Conversation
 
-import csv
 from time import sleep
+import csv
 from random import randint
-import socket
 import subprocess
-import xml.etree.ElementTree as ET
+import socket #  ソケット通信モジュール
+import xml.etree.ElementTree as ET # XMLエレメンタルツリー変換モジュール
 import bezelie
 
-csvFile = "bezeDialog.csv"
+csvFile = "bezeDialog.csv"  # 対話リスト
 
 # Variables
 muteTime = 0.8     # 音声入力を無視する時間（の半分の秒数）
-bufferSize = 16384 # 受信するデータの最大バイト数。できるだけ小さな２の倍数が望ましい。
+bufferSize = 1024 # 受信するデータの最大バイト数。できるだけ小さな２の倍数が望ましい。
 
 # Juliusをサーバモジュールモードで起動＝音声認識サーバーにする
 print "Pleas Wait For A While"  # サーバーが起動するまで時間がかかるので待つ
@@ -91,7 +92,7 @@ try:
 
 except KeyboardInterrupt:
   # CTRL+Cで終了
-  print "KeyboardInterrupt occured."
+  print "  終了しました"
   p.kill()
   subprocess.call(["kill " + pid], shell=True) # juliusのプロセスを終了
   client.close()
