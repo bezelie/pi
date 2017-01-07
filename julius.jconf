@@ -1,8 +1,9 @@
--w julius.dic                                                         #単単語認識で用いる単語辞書を指定する
--v /home/pi/dictation-kit-v4.4/model/lang_m/bccwj.60k.htkdic          #言語モデル、発音辞書
--h /home/pi/dictation-kit-v4.4/model/phone_m/jnas-tri-3k16-gid.binhmm #GMM-HMM音響モデル
--hlist /home/pi/dictation-kit-v4.4/model/phone_m/logicalTri           #Triphoneリスト
--n 5                                      #n個の文仮説数が見つかるまで検索を行う
+# Julius 設定ファイル：音声キーワード認識版
+-w julius.dic                                                         #単単語認識用単語辞書
+-v /home/pi/dictation-kit-v4.4/model/lang_m/bccwj.60k.htkdic          #単語辞書ファイル
+-h /home/pi/dictation-kit-v4.4/model/phone_m/jnas-tri-3k16-gid.binhmm #音響HMM定義ファイル
+-hlist /home/pi/dictation-kit-v4.4/model/phone_m/logicalTri           #HMMListファイル
+-n 2                                      #n個の文仮説数が見つかるまで検索を行う
 -output 1                                 #見つかったN-best候補のうち、結果として出力する個数
 -input mic                                #マイクからの直接入力
 -input oss                                #オープンサウンドシステム使用
