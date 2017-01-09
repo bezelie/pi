@@ -1,8 +1,10 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # Bezelie Sample Code for Raspberry Pi
 # speaking random messages referring to csv file
 
 import csv
+import re  # Regular Expression
 import datetime
 from time import sleep
 from random import randint
@@ -10,9 +12,20 @@ import subprocess
 import bezelie
 
 csvFile = "bezeTalk.csv"
-awakingTime = 7
-sleepingTime = 24
-interval = 0.1                    # seconds between the talks
+configFile = "bezeConfig.py"
+
+with open(configFile, 'r') as f:
+  list = f.readlines()
+
+for i in list:
+  m = re.search("= (.+)\n",i)
+  if "awakingTime" in i:awakingTime = int(m.group(1))
+  if "sleepingTime" in i:sleepingTime = int(m.group(1))
+  if "intervalTime" in i:intervalTime = int(m.group(1))
+
+print "awakingTime"+str(awakingTime)
+print "sleepingTime"+str(sleepingTime)
+print  "intervalTime"+str(intervalTime)
 
 # Functions
 def talkMessage(trigger):
@@ -56,35 +69,35 @@ try:
     print now
     if now.hour < awakingTime:
       print "It is a midnight"
-      sleep(interval)
+      sleep(intervalTime * 10)
     elif now.hour == awakingTime:
       print "It is an awaking time"
       talkMessage("awaking")
-      sleep(interval * randint(10,20))
+      sleep(intervalTime * randint(5,10))
     elif now.hour < 12:
       print "It is a morning"
       talkMessage("morning")
-      sleep(interval * randint(50,70))
+      sleep(intervalTime * randint(5,10))
     elif now.hour == 12:
       print "It is about noon"
       talkMessage("noon")
-      sleep(interval * randint(20,40))
+      sleep(intervalTime * randint(5,10))
     elif now.hour < 16:
       print "It is an afternoon"
       talkMessage("afternoon")
-      sleep(interval * randint(110,130))
+      sleep(intervalTime * randint(5,10))
     elif now.hour < 19:
       print "It is an evening"
       talkMessage("evening")
-      sleep(interval * randint(50,70))
+      sleep(intervalTime * randint(5,10))
     elif now.hour < sleepingTime-1:
       print "It is a night"
       talkMessage("night")
-      sleep(interval * randint(50,70))
+      sleep(intervalTime * randint(5,10))
     else:
       print "It is a time to go to the bed"
       talkMessage("bedtime")
-      sleep(interval * randint(20,40))
+      sleep(intervalTime * randint(5,10))
 
 except KeyboardInterrupt:
   print " Interrupted by Keyboard"

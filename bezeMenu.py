@@ -2,47 +2,29 @@
 # -*- coding: utf-8 -*-
 # Bezelie test code for Raspberry Pi : GUI
 
-import csv
+import re  # Regular Expression
 import sys
 import Tkinter  # Tk Interface
 from PIL import Image, ImageTk  # Python Image Library
 import subprocess
 import bezelie
-import bezeConfig
 
-# csvFile = "bezeConfig.csv"
-originalData = []  # Make empty list
+configFile = "bezeConfig.py"
 configWindow = None
 
-# Read bezeConfig.py
-headAdj = bezeConfig.headAdj
-backAdj = bezeConfig.backAdj
-stageAdj = bezeConfig.stageAdj
-awaking = bezeConfig.awakingTime
-sleeping = bezeConfig.sleepingTime
-interval = bezeConfig.intervalTime
-
 def centeringFunction():
-#  titleLabelWidget.config(text = "サーボをセンタリングします")
-  bezelie.moveCenter()
+  subprocess.call('python bezelie.py', shell=True)
   head.set(0)
   back.set(0)
   stage.set(0)
 
 def speakerFunction():
-#  titleLabelWidget.config(text = "サウンドチェック")
   subprocess.call('aplay Front_Center.wav', shell=True)
 
 def picturesFunction():
-#  titleLabelWidget.config(text = "Picturesディレクトリの中を表示します")
   subprocess.call('gpicview /home/pi/Pictures/', shell=True)
 
-def editorFunction():
-#  titleLabelWidget.config(text = "せりふデータを編集します")
-  subprocess.call('sudo leafpad bezeTalk.csv', shell=True)
-
 def webFunction():
-#  titleLabelWidget.config(text = "オンラインマニュアルを開きます")
   subprocess.call('chromium-browser http://bezelie.com', shell=True)
 
 def addressFunction():
@@ -61,7 +43,7 @@ def moveStageFunction(n):
 def configFunction():
   global configWindow
   if configWindow is None or not configWindow.winfo_exists():
-    # コンフィグウィンドウが複数開くことを防ぐため。
+    # コンフィグウィンドウが複数開くことを防ぐ。
     configWindow = Tkinter.Toplevel()
     configWindow.title("Config Menu")
     configWindow.geometry("470x300+320+50")
@@ -252,7 +234,19 @@ def configFunction():
     doneConfigButton.grid(column = 2, row = 7)
     cancelConfigButton.grid(column = 0, row = 7)
 
-    # Read data from csv file
+    # Read bezeConfig.py
+    with open(configFile, 'r') as f:
+      list = f.readlines()
+
+    for i in list:
+      m = re.search("= (.+)\n",i)
+      if "headAdj" in i:headAdj = m.group(1)
+      if "backAdj" in i:backAdj = m.group(1)
+      if "stageAdj" in i:stageAdj = m.group(1)
+      if "awakingTime" in i:awaking = m.group(1)
+      if "sleepingTime" in i:sleeping = m.group(1)
+      if "intervalTime" in i:interval = m.group(1)
+
     headAdjDisp.config(text = headAdj)
     backAdjDisp.config(text = backAdj)
     stageAdjDisp.config(text = stageAdj)
@@ -261,12 +255,6 @@ def configFunction():
     intervalAdjDisp.config(text = interval)
 
 def doneConfigFunction():
-#  headAdj = headAdjDisp.cget("text")
-#  backAdj = backAdjDisp.cget("text")
-#  stageAdj = stageAdjDisp.cget("text")
-#  awaking = awakingAdjDisp.cget("text")
-#  sleeping = sleepingAdjDisp.cget("text")
-#  interval = intervalAdjDisp.cget("text")
   line = ["headAdj = "+str(headAdjDisp.cget("text"))+"\n"]
   line.append("backAdj = "+str(backAdjDisp.cget("text"))+"\n")
   line.append("stageAdj = "+str(stageAdjDisp.cget("text"))+"\n")
@@ -397,13 +385,6 @@ centeringButtonWidget = Tkinter.Button(mainFrame, text = "サーボのセンタ�
   font = ("Times", 16, "normal"),
   command = centeringFunction)
 
-# タイトルグラフィック
-#image = Image.open('header.jpg')  # Open Image File
-#im = ImageTk.PhotoImage(image)  # Convert jpg into PhotoImage
-#logoLabelWidget = Tkinter.Label(mainFrame, 
-#  image = im,
-#  height = 60, width = 640)
-
 headScaleWidget = Tkinter.Scale(mainFrame, label = "HEAD サーボ",
   showvalue = "True", digits = 2,
   from_ = -20, to = 20,
@@ -437,12 +418,6 @@ picturesButtonWidget = Tkinter.Button(mainFrame, text = "画像ディレクト�
   font = ("Times", 16, "normal"),
   command = picturesFunction)
 
-editorButtonWidget = Tkinter.Button(mainFrame, text = "発話リストの編集",
-  background = "white", foreground = "blue",
-  height = 1, width = 20,
-  font = ("Times", 16, "normal"),
-  command = editorFunction)
-
 webButtonWidget = Tkinter.Button(mainFrame, text = "ベゼリーwebページ",
   background = "white", foreground = "blue",
   height = 1, width = 20,
@@ -465,14 +440,12 @@ exitButtonWidget = Tkinter.Button(mainFrame, text = "ウィンドウを閉じる
 mainFrame.pack()
 titleLabelWidget.grid(column = 0, row = 0)
 addressButtonWidget.grid(column = 0, row = 13)
-#logoLabelWidget.grid(column = 0, row = 1)
 centeringButtonWidget.grid(column = 0, row = 3)
 headScaleWidget.grid(column = 0, row = 4)
 backScaleWidget.grid(column = 0, row = 5)
 stageScaleWidget.grid(column = 0, row = 6)
 speakerButtonWidget.grid(column = 0, row = 7)
 picturesButtonWidget.grid(column = 0, row = 8)
-editorButtonWidget.grid(column = 0, row = 9)
 webButtonWidget.grid(column = 0, row = 10)
 configButtonWidget.grid(column = 0, row = 11)
 exitButtonWidget.grid(column = 0, row = 12)

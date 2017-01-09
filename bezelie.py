@@ -1,12 +1,20 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # Bezelie Python Module for Raspberry Pi
+
 import RPi.GPIO as GPIO
 from time import sleep
-import smbus
+import smbus  # I2C module
 import math
+import bezeConfig
 
-bus = smbus.SMBus(1)
+bus = smbus.SMBus(1) # I2C
 address_pca9685 = 0x40 # When you connect other I2C devices, you may have to change this number.
+
+# Read bezeConfig.py
+headAdj = bezeConfig.headAdj
+backAdj = bezeConfig.backAdj
+stageAdj = bezeConfig.stageAdj
 
 # Constants
 dutyMax = 490     #
@@ -61,41 +69,115 @@ def moveServo (id, degree, adj, max, min, speed, now):
   return (now)
 
 def moveHead (degree, speed=1):
-  adj = 0       # Head servo adjustment
+  global headAdj
   max = 360     # Downward limit
-  min = 280     # Upward limit
+  min = 230     # Upward limit
   global headNow
-  headNow = moveServo (2, degree, adj, max, min, speed, headNow)
+  headNow = moveServo (2, degree, headAdj, max, min, speed, headNow)
 
 def moveBack (degree, speed=1):
-  adj = 0       # Back servo adjustment
+  global backAdj
   max = 380     # AntiClockwise limit
   min = 220     # Clockwise limit
   global backNow
-  backNow = moveServo (1, degree, adj, max, min, speed, backNow)
+  backNow = moveServo (1, degree, backAdj, max, min, speed, backNow)
 
 def moveStage (degree, speed=1):
-  adj = 0      # Stage servo adjustment
+  global stageAdj
   max = 390    # AntiClockWise limit
   min = 210    # Clocwise limit
   global stageNow
-  stageNow = moveServo (0, degree, adj, max, min, speed,stageNow)
+  stageNow = moveServo (0, degree, stageAdj, max, min, speed,stageNow)
 
 def moveCenter ():
-    moveHead (0)
-    moveBack (0)
-    moveStage (0)
+  moveHead (headAdj)
+  moveBack (backAdj)
+  moveStage (stageAdj)
+
+# BezeActions
+# actHappyS(), actHappy(), actHappyB()
+# actTalk(),actYes(),actSad(),actAlarm(),actWhy(),actSleep()
+
+def actHappyS (time=1):
+  moveHead (10)
+  moveBack (10)
+  moveBack (-10)
+  moveBack (10)
+  moveBack (-10)
+  moveBack (0)
+  sleep (time)
+  moveHead (0)
+
+def actHappy (time=1):
+  moveHead (20)
+  moveBack (10)
+  moveBack (-10)
+  moveBack (10)
+  moveBack (-10)
+  moveBack (0)
+  sleep (time)
+  moveHead (0)
+
+def actHappyB (time=1):
+  moveHead (20)
+  moveBack (20)
+  moveBack (-20)
+  moveBack (20)
+  moveBack (-20)
+  moveBack (0)
+  sleep (time)
+  moveHead (0)
+
+def actTalk (time=1):
+  moveHead (-10)
+  moveHead (0)
+  moveHead (-10)
+  moveHead (0)
+
+def actYes (time=1):
+  moveHead (-20)
+  moveHead (0)
+
+def actSad (time=1):
+  moveHead (-20)
+  moveBack (10, 4)
+  moveBack (-10,4)
+  moveBack (0,4)
+  sleep (time)
+  moveHead (0)
+
+def actAlarm (time=1):
+  moveHead (20)
+  moveStage (40)
+  moveStage (-40)
+  moveStage (40)
+  moveStage (-40)
+  moveStage (0)
+  sleep (time)
+  moveHead (0)
+
+def actWhy (time=1):
+  moveBack (30)
+  sleep (time)
+  moveBack (0, 2)
+
+def actSleep (time=1):
+  moveHead (-20, 5)
+  moveHead (-15, 5)
+  moveHead (-20 ,5)
+  moveHead (-15, 5)
+  moveHead (-20 ,5)
+  sleep (time)
+  moveHead (0)
 
 # Centering Servo Motors
-try:
-    moveHead (20)
-    moveHead (-20)
-    moveHead (0)
-    moveBack (20)
-    moveBack (-20)
-    moveBack (0)
-    moveStage (20)
-    moveStage (-20)
-    moveStage (0)
-except KeyboardInterrupt:
-  print " Interrupted by Keyboard"
+if __name__ == "__main__":  # Do only when this is done as a script
+  moveHead (20)
+  moveHead (-20)
+  moveHead (headAdj)
+  moveBack (20)
+  moveBack (-20)
+  moveBack (backAdj)
+  moveStage (20)
+  moveStage (-20)
+  moveStage (stageAdj)

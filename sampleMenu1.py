@@ -13,9 +13,8 @@ mainWindow.geometry("320x280+100+50")  # ウィンドウサイズと画面内の
   # フォーマットは("幅x高"+横座標+縦座標)
 
 # X Windowアプリの起動
-def editorFunction():
-  subprocess.call('sudo leafpad bezeTalk.csv', shell=True)
-#  subprocess.call('gpicview /home/pi/Pictures/', shell=True)
+def picturesFunction():
+  subprocess.call('gpicview /home/pi/Pictures/', shell=True)
 
 # サウンドテスト
 def speakerFunction():
@@ -28,7 +27,6 @@ def webFunction():
 # pythonプログラムの実行
 def centeringFunction():
   subprocess.call('python bezelie.py', shell=True)
-#  bezelie.moveCenter()
 
 # タイトル表示
 titleLabelWidget = Tkinter.Label(mainWindow, 
@@ -54,12 +52,12 @@ speakerButtonWidget = Tkinter.Button(mainWindow,
   command = speakerFunction)
 
 # X Windowアプリの実行
-editorButtonWidget = Tkinter.Button(mainWindow,
+picturesButtonWidget = Tkinter.Button(mainWindow,
   background = "white", foreground = "blue",
   height = 1, width = 20,
   font = ("Times", 16, "normal"),
-  text = "CSVファイルの編集",
-  command = editorFunction)
+  text = "画像ディレクトリの表示",
+  command = picturesFunction)
 
 # Webページの表示
 webButtonWidget = Tkinter.Button(mainWindow,
@@ -81,7 +79,7 @@ exitButtonWidget = Tkinter.Button(mainWindow,
 titleLabelWidget.pack()
 centeringButtonWidget.pack()
 speakerButtonWidget.pack()
-editorButtonWidget.pack()
+picturesButtonWidget.pack()
 webButtonWidget.pack()
 exitButtonWidget.pack()
 
