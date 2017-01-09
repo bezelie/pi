@@ -5,7 +5,7 @@
 import re  # Regular Expression
 import sys
 import Tkinter  # Tk Interface
-from PIL import Image, ImageTk  # Python Image Library
+# from PIL import Image, ImageTk  # Python Image Library
 import subprocess
 import bezelie
 
