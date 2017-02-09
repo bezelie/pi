@@ -17,7 +17,7 @@ muteTime = 0.8     # 音声入力を無視する時間（の半分の秒数）
 bufferSize = 1024 # 受信するデータの最大バイト数。できるだけ小さな２の倍数が望ましい。
 
 # Juliusをサーバモジュールモードで起動＝音声認識サーバーにする
-print "Pleas Wait For A While"  # サーバーが起動するまで時間がかかるので待つ
+print "Please Wait For A While"  # サーバーが起動するまで時間がかかるので待つ
 p = subprocess.Popen(["sh julius.sh"], stdout=subprocess.PIPE, shell=True)
   # subprocess.PIPEは標準ストリームに対するパイプを開くことを指定するための特別な値
 pid = p.stdout.read()  # 終了時にJuliusのプロセスをkillするためプロセスIDをとっておく 
