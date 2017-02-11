@@ -8,8 +8,6 @@ import socket  # ソケット通信モジュール
 import xml.etree.ElementTree as ET  # XMLエレメンタルツリー変換モジュール
 
 # Variables
-# 本来は発話中にJuliusを一時停止すべきですが、このプログラムでは簡易的にウェイトだけで処理しています。
-muteTime = 0.8     # 音声入力を無視する時間（の半分の秒数）
 bufferSize = 1024  # 受信するデータの最大バイト数。できるだけ小さな２の倍数が望ましい。
 
 # Juliusをサーバモジュールモードで起動＝音声認識サーバーにする
@@ -18,16 +16,14 @@ p = subprocess.Popen(["sh /home/pi/bezelie/pi/julius.sh"], stdout=subprocess.PIP
 pid = p.stdout.read()  # 終了時にJuliusのプロセスをkillするためプロセスIDをとっておく 
 print "Julius's Process ID =" +pid
 
-# Juliusサーバーにアクセスするため自分のIPアドレスを取得する 
-getIP = subprocess.Popen(["hostname -I | awk -F' ' '{print $1}'"], stdout=subprocess.PIPE, shell=True)
-myIP = getIP.stdout.read()
-print "My IP is " +myIP
-
 # TCPクライアントを作成しJuliusサーバーに接続する
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # clientオブジェクト生成
-client.connect((myIP, 10500))  # Juliusサーバーに接続。portはデフォルトが10500。
+client.connect(('localhost', 10500))  # Juliusサーバーに接続。portはデフォルトが10500。
 
-# 解説
+# Get Started
+subprocess.call('sudo amixer -q sset Mic 62', shell=True)  # マイク感度を最大にする
+
+# 参考
 # Juliusから出力されるXML構造
 # <RECOGOUT>
 #   <SHYPO RANK="" SCORE="">
@@ -41,15 +37,17 @@ try:
   print "Please Speak"
   while True:
     if "</RECOGOUT>\n." in data:  # RECOGOUTツリーの最終行を見つけたら以下の処理を行う
-      root = ET.fromstring('<?xml version="1.0"?>\n' + data[data.find("<RECOGOUT>"):].replace("\n.", ""))
+      try:
+        root = ET.fromstring('<?xml version="1.0"?>\n' + data[data.find("<RECOGOUT>"):].replace("\n.", ""))
         # fromstringはXML文字列からコンテナオブジェクトであるElement型に直接取り込む
-      for whypo in root.findall("./SHYPO/WHYPO"):
-        print (whypo.get("WORD"))
-        subprocess.call('/home/pi/aquestalkpi/AquesTalkPi -s 120 "'+ whypo.get("WORD") +'" | aplay -q', shell=True)
-        for var in range (0,2):  # 音声合成音を入力してしまわないように受信データを２秒弱の間無視する
-          sleep (0.8)
-            # 0.8秒のwaitを２回ループ入れてみたところ丁度よかったが、環境によっては調整が必要と思われる。
-          data = client.recv(bufferSize)
+        for whypo in root.findall("./SHYPO/WHYPO"):
+          keyWord = whypo.get("WORD")
+        print "You might speak..."+keyWord
+        subprocess.call('sudo amixer -q sset Mic 0', shell=True)  # 自分の声を取り込まないようにマイクをオフにする
+        subprocess.call('/home/pi/aquestalkpi/AquesTalkPi -s 120 "'+ keyWord +'" | aplay -q', shell=True)
+        subprocess.call('sudo amixer -q sset Mic 62', shell=True)  #
+      except:
+        print "error"
       data = ""  # 認識終了したのでデータをリセットする
     else:
       response = client.recv(bufferSize)
