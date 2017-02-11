@@ -11,7 +11,7 @@ import xml.etree.ElementTree as ET  # XMLエレメンタルツリー変換モジ
 bufferSize = 1024  # 受信するデータの最大バイト数。できるだけ小さな２の倍数が望ましい。
 
 # Juliusをサーバモジュールモードで起動＝音声認識サーバーにする
-print "Pleas Wait For A While"  # サーバーが起動するまで時間がかかるので待つ
+print "Please Wait For A While"  # サーバーが起動するまで時間がかかるので待つ
 p = subprocess.Popen(["sh /home/pi/bezelie/pi/julius.sh"], stdout=subprocess.PIPE, shell=True)
 pid = p.stdout.read()  # 終了時にJuliusのプロセスをkillするためプロセスIDをとっておく 
 print "Julius's Process ID =" +pid
