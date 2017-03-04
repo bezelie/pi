@@ -1,0 +1,15 @@
+# Julius 設定ファイル：自然言語認識版
+-d /home/pi/dictation-kit-v4.4/model/lang_m/bccwj.60k.bingram         # 単語2-gram,3-gramファイル
+-v /home/pi/dictation-kit-v4.4/model/lang_m/bccwj.60k.htkdic          #単語辞書ファイル
+-h /home/pi/dictation-kit-v4.4/model/phone_m/jnas-tri-3k16-gid.binhmm #音響HMM定義ファイル
+-hlist /home/pi/dictation-kit-v4.4/model/phone_m/logicalTri-3k16-gid.bin           #HMMListファイル
+-n 5                                      #n個の文仮説数が見つかるまで検索を行う
+-output 1                                 #見つかったN-best候補のうち、結果として出力する個数
+-input mic                                #マイクからの直接入力
+-input oss                                #オープンサウンドシステム使用
+-rejectshort 800                          #検出された入力が閾値以下なら棄却
+-lv 2000                                  #入力の振幅レベルのしきい値(0から32767の範囲。デフォルトは2000)
+#-charconv EUC-JP UTF-8               #出力文字コードの変換(内部euc-jp, 出力utf-8)
+#-zmeanframe                          #窓単位の直流成分除去を有効化／無効化する． (default: disabled)
+#-w julius.dic                                                         #単単語認識用単語辞書
+#-hlist /home/pi/dictation-kit-v4.4/model/phone_m/logicalTri           #HMMListファイル

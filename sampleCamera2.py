@@ -40,17 +40,17 @@ def get_distance():
 def sensorCheck():
     global photoNo
     if get_distance() < actionDistance:
-      bezelie.centering()
+      bezelie.moveCenter()
       subprocess.call('/home/pi/aquestalkpi/AquesTalkPi -s 120 "こんにちわー" | aplay', shell=True)
       camera.stop_preview()
       camera.capture('/home/pi/Pictures/image'+ str(photoNo) +'.jpg')
       photoNo += 1
-#      camera.capture_continuous('image{counter}.jpg')
       camera.start_preview()
       time.sleep(0.5)
 
 # Centering All Servos
-bezelie.centering()
+bezelie.initPCA9685()
+bezelie.moveCenter()
 
 # Main Loop
 try:
@@ -58,22 +58,22 @@ try:
     camera.resolution = (800, 480)   # Change this number for your display
     camera.rotation = 180            # comment out if your screen upside down
     camera.start_preview()
-    time.sleep(0.2)
-    pit = 0
+    time.sleep(2)
+    head = 0
     while (True):
-      bezelie.moveRot (-15)
-      bezelie.moveYaw (-40, 2)
+      bezelie.moveBack (15)
+      bezelie.moveStage (40, 2)
       sensorCheck()
-      time.sleep (1)
-      bezelie.moveRot (15)
-      bezelie.moveYaw (40, 2)
+      time.sleep (0.5)
+      bezelie.moveBack (-15)
+      bezelie.moveStage (-40, 2)
       sensorCheck()
-      time.sleep (1)
-      pit += 10
-      if pit > 10:
-        pit = -20
-      bezelie.movePit (pit)
-      time.sleep (1)
+      time.sleep (0.5)
+      head += 10
+      if head > 20:
+        head = -20
+      bezelie.moveHead (head)
+      time.sleep (0.5)
 
 except KeyboardInterrupt:
   print " Interrupted by Keyboard"

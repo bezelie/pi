@@ -4,36 +4,22 @@ from  time import sleep
 import bezelie
 
 # Set Up
-bezelie.centering()
+bezelie.initPCA9685()
 
 # Main Loop
 try:
   while (True):
-    bezelie.movePit (30, 2)
-    sleep (0.2)
-
-    bezelie.movePit (-30, 1)
-    sleep (0.2)
-
-    bezelie.movePit (0)
+    bezelie.moveHead (20)
+#    bezelie.moveHead (-20)
+    bezelie.moveHead (0)
     sleep (0.5)
-
-    bezelie.moveRot (30, 1)
-    sleep (0.2)
-
-    bezelie.moveRot (-30, 1)
-    sleep (0.2)
-
-    bezelie.moveRot (0)
+    bezelie.moveBack (30)
+#    bezelie.moveBack (-30)
+    bezelie.moveBack (0)
     sleep (0.5)
-
-    bezelie.moveYaw (40)
-    sleep (0.2)
-
-    bezelie.moveYaw (-40)
-    sleep (0.2)
-
-    bezelie.moveYaw (0)
+    bezelie.moveStage (40)
+#    bezelie.moveStage (-40)
+    bezelie.moveStage (0)
     sleep (0.5)
 
 except KeyboardInterrupt:
