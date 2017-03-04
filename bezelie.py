@@ -15,15 +15,17 @@ address_pca9685 = 0x40 # When you connect other I2C devices, you may have to cha
 headAdj = bezeConfig.headAdj
 backAdj = bezeConfig.backAdj
 stageAdj = bezeConfig.stageAdj
+armLAdj = bezeConfig.armLAdj
+armRAdj = bezeConfig.armRAdj
 
 # Constants
 dutyMax = 490     #
 dutyMin = 110     #
 dutyCenter = 300  #
-steps = 1         #
+steps = 4         #
 
 # Global Valiables
-headNow = backNow = stageNow = dutyCenter
+headNow = backNow = stageNow = armLNow = armRNow = dutyCenter
 
 # Functions
 def initPCA9685():
@@ -36,9 +38,9 @@ def initPCA9685():
     prescaleval -= 1.0
     prescale = int(math.floor(prescaleval + 0.5))
     oldmode = bus.read_byte_data(address_pca9685, 0x00)
-    newmode = (oldmode & 0x7F) | 0x10             
-    bus.write_byte_data(address_pca9685, 0x00, newmode) 
-    bus.write_byte_data(address_pca9685, 0xFE, prescale) 
+    newmode = (oldmode & 0x7F) | 0x10
+    bus.write_byte_data(address_pca9685, 0x00, newmode)
+    bus.write_byte_data(address_pca9685, 0xFE, prescale)
     bus.write_byte_data(address_pca9685, 0x00, oldmode)
     sleep(0.005)
     bus.write_byte_data(address_pca9685, 0x00, oldmode | 0xa1)
@@ -68,12 +70,13 @@ def moveServo (id, degree, adj, max, min, speed, now):
       now -= steps
       if now < dst: now = dst
     setPCA9685Duty(id, 0, now)
-    sleep(0.004 * steps *(speed))
+    sleep(0.01 * steps *(speed))
+#    sleep(0.004 * steps *(speed))
   return (now)
 
 def moveHead (degree, speed=1):
   global headAdj
-  max = 360     # Downward limit
+  max = 320     # Downward limit
   min = 230     # Upward limit
   global headNow
   headNow = moveServo (2, degree, headAdj, max, min, speed, headNow)
@@ -92,10 +95,26 @@ def moveStage (degree, speed=1):
   global stageNow
   stageNow = moveServo (0, degree, stageAdj, max, min, speed,stageNow)
 
+def moveArmL (degree, speed=1):
+  global armLAdj
+  max = 390    # AntiClockWise limit
+  min = 210    # Clocwise limit
+  global armLNow
+  armLNow = moveServo (3, degree, armLAdj, max, min, speed,armLNow)
+
+def moveArmR (degree, speed=1):
+  global armRAdj
+  max = 390    # AntiClockWise limit
+  min = 210    # Clocwise limit
+  global armRNow
+  armRNow = moveServo (4, degree, armRAdj, max, min, speed,armRNow)
+
 def moveCenter ():
   moveHead (headAdj)
   moveBack (backAdj)
   moveStage (stageAdj)
+  moveArmL (armLAdj)
+  moveArmR (armRAdj)
 
 # BezeActions
 # actHappyS(), actHappy(), actHappyB()
@@ -173,6 +192,9 @@ def actSleep (time=1):
   sleep (time)
   moveHead (0)
 
+# Set Up
+initPCA9685()
+
 # Centering Servo Motors
 if __name__ == "__main__":  # Do only when this is done as a script
   moveHead (20)
@@ -184,3 +206,10 @@ if __name__ == "__main__":  # Do only when this is done as a script
   moveStage (20)
   moveStage (-20)
   moveStage (stageAdj)
+  moveArmL (30)
+  moveArmR (-30)
+  moveArmL (-30)
+  moveArmR (30)
+  moveArmL (armLAdj)
+  moveArmR (armRAdj)
+
