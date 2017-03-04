@@ -1,7 +1,7 @@
 # Julius起動スクリプト　自然言語版
 julius -C juliusNL.jconf -module > /dev/null &
 echo $!
-sleep 3
+sleep 4
 # -moduleオプション= Juliusをモジュールモードで起動
 # /dev/nullはlinuxの特殊ファイルで、何も出力したくない時に指定する。
 # $! = シェルが最後に実行したバックグラウンドプロセスのID
