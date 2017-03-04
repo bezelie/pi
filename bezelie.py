@@ -27,20 +27,23 @@ headNow = backNow = stageNow = dutyCenter
 
 # Functions
 def initPCA9685():
-  bus.write_byte_data(address_pca9685, 0x00, 0x00)
-  freq = 0.9*50
-  prescaleval = 25000000.0    # 25MHz
-  prescaleval /= 4096.0       # 12-bit
-  prescaleval /= float(freq)
-  prescaleval -= 1.0
-  prescale = int(math.floor(prescaleval + 0.5))
-  oldmode = bus.read_byte_data(address_pca9685, 0x00)
-  newmode = (oldmode & 0x7F) | 0x10             
-  bus.write_byte_data(address_pca9685, 0x00, newmode) 
-  bus.write_byte_data(address_pca9685, 0xFE, prescale) 
-  bus.write_byte_data(address_pca9685, 0x00, oldmode)
-  sleep(0.005)
-  bus.write_byte_data(address_pca9685, 0x00, oldmode | 0xa1)
+  try:
+    bus.write_byte_data(address_pca9685, 0x00, 0x00)
+    freq = 0.9*50
+    prescaleval = 25000000.0    # 25MHz
+    prescaleval /= 4096.0       # 12-bit
+    prescaleval /= float(freq)
+    prescaleval -= 1.0
+    prescale = int(math.floor(prescaleval + 0.5))
+    oldmode = bus.read_byte_data(address_pca9685, 0x00)
+    newmode = (oldmode & 0x7F) | 0x10             
+    bus.write_byte_data(address_pca9685, 0x00, newmode) 
+    bus.write_byte_data(address_pca9685, 0xFE, prescale) 
+    bus.write_byte_data(address_pca9685, 0x00, oldmode)
+    sleep(0.005)
+    bus.write_byte_data(address_pca9685, 0x00, oldmode | 0xa1)
+  except:
+    print "ERROR:サーボドライバボードがI2Cにつながっていないようですね"
 
 def setPCA9685Duty(channel, on, off):
   channelpos = 0x6 + 4*channel
