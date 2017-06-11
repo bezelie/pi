@@ -12,7 +12,7 @@ bufferSize = 1024  # 受信するデータの最大バイト数。できるだ�
 
 # Juliusをサーバモジュールモードで起動＝音声認識サーバーにする
 print "Pleas Wait For A While"  # サーバーが起動するまで時間がかかるので待つ
-p = subprocess.Popen(["sh /home/pi/bezelie/testpi/juliusNL.sh"], stdout=subprocess.PIPE, shell=True)
+p = subprocess.Popen(["sh /home/pi/bezelie/pi/juliusNL.sh"], stdout=subprocess.PIPE, shell=True)
 pid = p.stdout.read()  # 終了時にJuliusのプロセスをkillするためプロセスIDをとっておく 
 print "Julius's Process ID =" +pid
 
